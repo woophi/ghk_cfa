@@ -13,13 +13,16 @@ export const ThxLayout = () => {
       <div className={thxSt.container}>
         <img src={aLogo} className={thxSt.rocket} />
         <Typography.TitleResponsive font="system" tag="h1" view="large" defaultMargins weight="bold">
-          Ваша заявка обрабатывается.
+          Мы знаем, что вы хотели подать заявку
+        </Typography.TitleResponsive>
+        <Typography.TitleResponsive font="system" tag="h2" view="xsmall" defaultMargins weight="regular">
+          Совсем скоро вы сможете выбрать ЦФА в нашем основном разделе.
         </Typography.TitleResponsive>
       </div>
       <Gap size={128} />
       <div className={appSt.bottomBtn}>
         <ButtonMobile block view="primary" href="alfabank://longread?endpoint=v1/adviser/longreads/15885">
-          Далее
+          Буду ждать!
         </ButtonMobile>
       </div>
     </>
