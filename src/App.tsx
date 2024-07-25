@@ -5,7 +5,11 @@ import { Gap } from '@alfalab/core-components/gap';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { Typography } from '@alfalab/core-components/typography';
 import { useCallback, useState } from 'react';
+import caseIcon from './assets/case.png';
 import cfa from './assets/cfa.png';
+import checkIcon from './assets/check.png';
+import safeIcon from './assets/safe.png';
+import { data } from './data';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
@@ -13,13 +17,15 @@ import { ThxLayout } from './thx/ThxLayout';
 export const App = () => {
   const [cfaValue, setCFA] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [modalData, setModalData] = useState({ title: '', subtitle: '' });
   const [err, setError] = useState('');
   const [thxShow, setThx] = useState(LS.getItem(LSKeys.ShowThx, false));
   const [open, setOpen] = useState(false);
 
   const submit = useCallback(() => {
+    setError('');
     if (!cfaValue) {
-      setError('У вас не выбрано ни одной категории');
+      setError('Введите количество ЦФА');
       return;
     }
     setLoading(true);
@@ -40,6 +46,11 @@ export const App = () => {
     setCFA(v => (v <= 0 ? 0 : v - 1));
   }, []);
 
+  const openModal = useCallback((data: { title: string; subtitle: string }) => {
+    setModalData(data);
+    setOpen(true);
+  }, []);
+
   if (thxShow) {
     return <ThxLayout />;
   }
@@ -48,7 +59,7 @@ export const App = () => {
     <>
       <div className={appSt.container}>
         <Typography.TitleResponsive tag="h1" view="medium" font="system" weight="medium">
-          Заявка на ЦФА
+          Заявка на покупку
         </Typography.TitleResponsive>
 
         <div className={appSt.box}>
@@ -56,10 +67,10 @@ export const App = () => {
 
           <div>
             <Typography.Text tag="p" weight="bold" view="primary-medium" defaultMargins={false}>
-              Индекс Санкт-Петербург
+              {data.title}
             </Typography.Text>
             <Typography.Text tag="p" view="primary-small" defaultMargins={false}>
-              Недвижимость
+              {data.cfaType}
             </Typography.Text>
           </div>
         </div>
@@ -70,7 +81,7 @@ export const App = () => {
               {cfaValue}
             </Typography.Text>
             <Typography.Text tag="p" weight="bold" view="primary-medium" defaultMargins={false}>
-              ЦФА
+              {data.inputValueText}
             </Typography.Text>
           </div>
 
@@ -87,20 +98,35 @@ export const App = () => {
         </div>
       </div>
       <div className={appSt.containerSecondary}>
-        <Typography.TitleResponsive tag="h1" view="medium" font="system" weight="medium">
-          Индекс Санкт-Петербург
+        <Typography.TitleResponsive tag="h2" view="medium" font="system" weight="medium">
+          {data.title}
         </Typography.TitleResponsive>
         <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
-          Цифровые квадратные метры — это такие специальные квадратные метры, которые можно быстро покупать и продавать
+          {data.text}
         </Typography.Text>
+
         <div />
-        <div>
-          <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-            Тип ЦФА
-          </Typography.Text>
-          <Typography.Text tag="p" view="primary-medium" weight="bold" defaultMargins={false}>
-            Цифровые обязательства
-          </Typography.Text>
+        <div className={appSt.row}>
+          <div>
+            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+              Тип ЦФА
+            </Typography.Text>
+            <Typography.Text tag="p" view="primary-medium" weight="bold" defaultMargins={false}>
+              {data.cfaType}
+            </Typography.Text>
+          </div>
+          <IconButton
+            view="primary"
+            size={32}
+            icon={<CDNIcon name="glyph_information-circle_m" />}
+            onClick={() =>
+              openModal({
+                title: 'Тип ЦФА',
+                subtitle:
+                  'Цифровые обязательства – проценты и возврат начальной стоимости ЦФА в срок погашения. ЦФА в денежный поток – выплаты по кредитному договору между эмитентом и третьей стороной. Недвижимость – инвестирование в недвижимость, выраженную в цифровом индексе',
+              })
+            }
+          />
         </div>
 
         <div />
@@ -115,20 +141,16 @@ export const App = () => {
           </div>
           <IconButton
             view="primary"
-            onClick={() => setOpen(true)}
             size={32}
             icon={<CDNIcon name="glyph_information-circle_m" />}
+            onClick={() =>
+              openModal({
+                title: 'Цена ЦФА',
+                subtitle:
+                  'Цену устанавливает эмитент, она не меняется. Купить или продать актив по другой цене можно будет только на вторичном рынке.',
+              })
+            }
           />
-        </div>
-
-        <div />
-        <div>
-          <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-            Объем выпуска в денежном выражении
-          </Typography.Text>
-          <Typography.Text tag="p" view="primary-medium" weight="bold" defaultMargins={false}>
-            от 1 000 000 ₽ до 700 000 000 ₽
-          </Typography.Text>
         </div>
 
         <div />
@@ -141,7 +163,18 @@ export const App = () => {
               Фиксированная
             </Typography.Text>
           </div>
-          <IconButton view="primary" size={32} icon={<CDNIcon name="glyph_information-circle_m" />} />
+          <IconButton
+            view="primary"
+            size={32}
+            icon={<CDNIcon name="glyph_information-circle_m" />}
+            onClick={() =>
+              openModal({
+                title: 'Тип процентной ставки',
+                subtitle:
+                  'Фиксированная процентная ставка - зафиксированная на уровне определенного значения. Плавающая процентная ставка – находится в зависимости от определенной переменной и может изменяться. Барьерная процентная ставка – находится в зависимости от определенной переменной и при этом не может быть ниже и/или выше уровня определенного зафиксированного значения',
+              })
+            }
+          />
         </div>
 
         <div />
@@ -151,10 +184,20 @@ export const App = () => {
               Процентная ставка
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="bold" defaultMargins={false}>
-              19,75%
+              {data.rate}
             </Typography.Text>
           </div>
-          <IconButton view="primary" size={32} icon={<CDNIcon name="glyph_information-circle_m" />} />
+          <IconButton
+            view="primary"
+            size={32}
+            icon={<CDNIcon name="glyph_information-circle_m" />}
+            onClick={() =>
+              openModal({
+                title: 'Процентная ставка',
+                subtitle: 'Выплата, которую получает инвестор от эмитента, выпустившего цифровые обязательства.',
+              })
+            }
+          />
         </div>
 
         <div />
@@ -173,8 +216,48 @@ export const App = () => {
             Срок обращения
           </Typography.Text>
           <Typography.Text tag="p" view="primary-medium" weight="bold" defaultMargins={false}>
-            8 месяцев
+            1 год
           </Typography.Text>
+        </div>
+
+        <Typography.TitleResponsive tag="h3" view="small" font="system" weight="semibold">
+          Почему стоит купить
+        </Typography.TitleResponsive>
+        <div className={appSt.rowImg}>
+          <img style={{ objectFit: 'contain' }} src={caseIcon} width={48} height={48} />
+
+          <div>
+            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
+              Низкий порог входа
+            </Typography.Text>
+            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+              Инвестиции от 1000 ₽
+            </Typography.Text>
+          </div>
+        </div>
+        <div className={appSt.rowImg}>
+          <img style={{ objectFit: 'contain' }} src={checkIcon} width={48} height={48} />
+
+          <div>
+            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
+              Удобство
+            </Typography.Text>
+            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+              Доступ к выгодному активу без необходимости управлять физической недвижимостью
+            </Typography.Text>
+          </div>
+        </div>
+        <div className={appSt.rowImg}>
+          <img style={{ objectFit: 'contain' }} src={safeIcon} width={48} height={48} />
+
+          <div>
+            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
+              Надёжность
+            </Typography.Text>
+            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+              Гарантированная доходность и защита капитала
+            </Typography.Text>
+          </div>
         </div>
 
         <Gap size={96} />
@@ -200,7 +283,7 @@ export const App = () => {
       <BottomSheet
         title={
           <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-            Цена ЦФА
+            {modalData.title}
           </Typography.Text>
         }
         open={open}
@@ -208,7 +291,7 @@ export const App = () => {
         hasCloser
       >
         <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
-          Цифровые квадратные метры — это такие специальные квадратные метры, которые можно быстро покупать и продавать
+          {modalData.subtitle}
         </Typography.Text>
       </BottomSheet>
     </>

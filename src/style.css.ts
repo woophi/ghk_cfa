@@ -90,6 +90,12 @@ const row = style({
   justifyContent: 'space-between',
 });
 
+const rowImg = style({
+  display: 'flex',
+  alignItems: 'center',
+  gap: '1rem',
+});
+
 export const appSt = {
   bottomBtn,
   container,
@@ -103,4 +109,5 @@ export const appSt = {
   inputActionsHR,
   containerSecondary,
   row,
+  rowImg,
 };
