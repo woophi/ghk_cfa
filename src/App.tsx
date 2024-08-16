@@ -62,6 +62,7 @@ export const App = () => {
           Заявка на покупку
         </Typography.TitleResponsive>
 
+        <a href="https://samolet.ru/">https://samolet.ru/</a>
         <div className={appSt.box}>
           <img src={cfa} width={48} height={48} />
 
