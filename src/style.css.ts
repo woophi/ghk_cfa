@@ -1,9 +1,9 @@
-import { style } from '@vanilla-extract/css';
+import { globalStyle, style } from '@vanilla-extract/css';
 
 const bottomBtn = style({
   position: 'fixed',
   zIndex: 2,
-  width: 'calc(100% - 24px)',
+  width: '100%',
   padding: '12px',
   bottom: 0,
 });
@@ -13,14 +13,33 @@ const container = style({
   padding: '1rem',
   flexDirection: 'column',
   gap: '1rem',
-});
-const containerSecondary = style({
-  display: 'flex',
-  padding: '2rem 1rem 1rem',
-  flexDirection: 'column',
-  gap: '1rem',
-  backgroundColor: '#F2F3F5',
   borderRadius: '24px 24px 0px 0px',
+  backgroundColor: '#ffffff',
+  marginTop: '-2rem',
+  position: 'relative',
+  zIndex: 1,
+});
+
+const topBanner = style({
+  backgroundColor: '#000000',
+  borderRadius: '1rem',
+  padding: '12px',
+  gap: '8px',
+  display: 'flex',
+  flexDirection: 'column',
+  width: 'calc(100% - 2rem)',
+  position: 'absolute',
+  zIndex: '1',
+  top: '-102px',
+  left: '16px',
+});
+const topBannerText = style({
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+});
+const topBannerProgress = style({
+  backgroundColor: '#ffffff',
 });
 
 const btnContainer = style({
@@ -30,9 +49,17 @@ const btnContainer = style({
   textAlign: 'left',
   gap: '1rem',
 });
+const btnContainerWrap = style({
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '1rem',
+});
 const btn = style({
   borderRadius: '24px',
   padding: '1rem',
+  height: '144px',
+  backgroundColor: '#000000',
+  color: '#fff',
 });
 const btnArrow = style({
   width: '48px',
@@ -57,11 +84,11 @@ const box = style({
 const inputContainer = style({
   borderRadius: '12px',
   padding: '4px 4px 4px 16px',
-  backgroundColor: '#F3F4F5',
+  backgroundColor: '#333333',
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  height: '40px',
+  height: '48px',
 });
 const inputValue = style({
   display: 'flex',
@@ -70,24 +97,31 @@ const inputValue = style({
 });
 
 const inputActions = style({
-  backgroundColor: '#fff',
+  backgroundColor: '#000000',
   borderRadius: '8px',
   padding: '8px',
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
   gap: '1rem',
+  color: '#fff',
 });
 const inputActionsHR = style({
   height: '16px',
   width: '1px',
-  backgroundColor: '#F3F4F5',
+  backgroundColor: '#333333',
+});
+const inputActionsMinus = style({});
+
+globalStyle(`${inputActionsMinus} > svg > rect:last-child`, {
+  fill: '#fff',
 });
 
 const row = style({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
+  marginTop: '1rem',
 });
 
 const rowImg = style({
@@ -107,7 +141,11 @@ export const appSt = {
   inputValue,
   inputActions,
   inputActionsHR,
-  containerSecondary,
   row,
   rowImg,
+  topBanner,
+  topBannerText,
+  topBannerProgress,
+  btnContainerWrap,
+  inputActionsMinus,
 };
