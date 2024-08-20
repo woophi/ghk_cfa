@@ -3,7 +3,7 @@ import sun from './assets/sun.png';
 import suns from './assets/suns.png';
 
 export const data = {
-  minRequest: 50_000,
+  minRequest: 11_256,
   maxRequest: 200_000,
   titleName: 'Санкт-Петербург',
   titleType: 'Жилая недвижимость',
