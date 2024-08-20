@@ -1,7 +1,9 @@
 import { BottomSheet } from '@alfalab/core-components/bottom-sheet';
 import { CDNIcon } from '@alfalab/core-components/cdn-icon';
 import { IconButton } from '@alfalab/core-components/icon-button';
+import { Notification } from '@alfalab/core-components/notification';
 import { ProgressBar } from '@alfalab/core-components/progress-bar';
+import { TooltipDesktop } from '@alfalab/core-components/tooltip/desktop';
 import { Typography } from '@alfalab/core-components/typography';
 import { useCallback, useState } from 'react';
 import calendar from './assets/calendar.png';
@@ -11,6 +13,7 @@ import suns from './assets/suns.png';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
+import { useCopyToClipboard } from './useCopyToClipBoard';
 
 export const App = () => {
   const [cfaValue, setCFA] = useState(0);
@@ -19,11 +22,14 @@ export const App = () => {
   const [err, setError] = useState('');
   const [thxShow, setThx] = useState(LS.getItem(LSKeys.ShowThx, false));
   const [open, setOpen] = useState(false);
+  const { copiedText, copy } = useCopyToClipboard();
+  const [isVisible, setIsVisible] = useState(false);
 
   const submit = useCallback(() => {
     setError('');
     if (!cfaValue) {
       setError('Введите количество ЦФА');
+      setIsVisible(true);
       return;
     }
     setLoading(true);
@@ -36,6 +42,8 @@ export const App = () => {
     //   setThx(true);
     // });
   }, [cfaValue]);
+
+  const hideNotification = useCallback(() => setIsVisible(false), []);
 
   const onUp = useCallback(() => {
     setCFA(v => (v >= 999 ? 999 : v + 1));
@@ -325,16 +333,26 @@ export const App = () => {
           </div>
         </div>
 
-        <div className={appSt.row}>
-          <div>
-            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-              Cайт эмитента
-            </Typography.Text>
-            <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              https://alfabank.ru/
-            </Typography.Text>
+        <TooltipDesktop view="hint" open={!!copiedText} content="Скопировано" position="top" offset={[0, -10]}>
+          <div className={appSt.row} onClick={() => copy('https://alfabank.ru/')}>
+            <div>
+              <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+                Cайт эмитента
+              </Typography.Text>
+              <Typography.Text
+                tag="p"
+                view="primary-medium"
+                weight="medium"
+                defaultMargins={false}
+                style={{ textDecoration: 'underline' }}
+              >
+                https://alfabank.ru/
+              </Typography.Text>
+            </div>
+
+            <IconButton view="primary" size={32} icon={<CDNIcon name="glyph_copy-line_m" color="#C1C1C3" />} />
           </div>
-        </div>
+        </TooltipDesktop>
 
         <div style={{ height: '160px' }} />
       </div>
@@ -397,6 +415,16 @@ export const App = () => {
           {modalData.subtitle}
         </Typography.Text>
       </BottomSheet>
+
+      <Notification
+        badge="attention"
+        title={err}
+        visible={isVisible}
+        offset={160}
+        onClose={hideNotification}
+        onCloseTimeout={hideNotification}
+        position="bottom"
+      />
     </>
   );
 };
