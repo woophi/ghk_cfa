@@ -6,10 +6,8 @@ import { ProgressBar } from '@alfalab/core-components/progress-bar';
 import { TooltipDesktop } from '@alfalab/core-components/tooltip/desktop';
 import { Typography } from '@alfalab/core-components/typography';
 import { useCallback, useState } from 'react';
-import calendar from './assets/calendar.png';
 import main from './assets/main.jpg';
-import sun from './assets/sun.png';
-import suns from './assets/suns.png';
+import { data } from './data';
 import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
@@ -71,10 +69,14 @@ export const App = () => {
               Собрано заявок
             </Typography.Text>
             <Typography.Text view="primary-medium" defaultMargins={false} weight="bold" color="primary-inverted">
-              5 000 / 200 000
+              {data.minRequest.toLocaleString('ru')} / {data.maxRequest.toLocaleString('ru')}
             </Typography.Text>
           </div>
-          <ProgressBar value={(5000 / 20_000) * 100} view="attention" className={appSt.topBannerProgress} />
+          <ProgressBar
+            value={(data.minRequest / data.maxRequest) * 100}
+            view="attention"
+            className={appSt.topBannerProgress}
+          />
           <div className={appSt.topBannerText}>
             <Typography.Text view="primary-small" defaultMargins={false} color="primary-inverted">
               Сбор заявок до
@@ -87,23 +89,21 @@ export const App = () => {
 
         <div style={{ margin: '1rem 0' }}>
           <Typography.TitleResponsive tag="h1" view="medium" font="system" weight="medium">
-            Санкт-Петербург
+            {data.titleName}
           </Typography.TitleResponsive>
           <Typography.Text view="primary-small" color="secondary">
-            Жилая недвижимость • Срок 3 года
+            {data.titleType} • Срок {data.titlePeriod}
           </Typography.Text>
         </div>
 
         <Typography.Text view="primary-medium" defaultMargins={false}>
-          Цифровые квадратные метры жилой недвижимости — это инвестиции в индексное значение стоимости первичной недвижимости
-          соответствующего региона.
+          {data.p1}
         </Typography.Text>
         <Typography.Text view="primary-medium" defaultMargins={false}>
-          Покупая Цифровые квадратные метры жилой недвижимости, вы получаете участие в динамике стоимости жилой недвижимости,
-          рассчитываемой на основании цен по заключенным и зарегистрированным договорам долевого участия (ДДУ).
+          {data.p2}
         </Typography.Text>
         <Typography.Text view="primary-medium" defaultMargins={false}>
-          Цифровые квадратные метры жилой недвижимости – это инновационный продукт, выпускаемый в формате ЦФА.
+          {data.p3}
         </Typography.Text>
 
         <div className={appSt.row}>
@@ -112,7 +112,7 @@ export const App = () => {
               Номер ЦФА
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              ALFB-1-DTD-092024-00073
+              {data.cfaNumber}
             </Typography.Text>
           </div>
         </div>
@@ -125,7 +125,7 @@ export const App = () => {
 
             <div style={{ display: 'inline-flex', gap: '1rem' }}>
               <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-                2500 ₽
+                {data.cfaPrice}
               </Typography.Text>
               <Typography.Text tag="p" view="primary-medium" color="secondary" defaultMargins={false}>
                 1 ЦФА = 0,01 м2
@@ -153,7 +153,7 @@ export const App = () => {
               Объем выпуска в денежном выражении
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              от 50 000 000 ₽ до 500 000 000 ₽
+              {data.cfaVolume}
             </Typography.Text>
           </div>
         </div>
@@ -164,7 +164,7 @@ export const App = () => {
               Объём выпуска в квадратных метрах
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              от 200 м2 до 2 000 м2
+              {data.cfaVolumeM2}
             </Typography.Text>
           </div>
         </div>
@@ -175,7 +175,7 @@ export const App = () => {
               Выплата дохода
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              В конце срока
+              {data.cfaPeriodPayment}
             </Typography.Text>
           </div>
         </div>
@@ -186,7 +186,7 @@ export const App = () => {
               Срок обращения
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              3 года
+              {data.cfaDuration}
             </Typography.Text>
           </div>
         </div>
@@ -218,28 +218,30 @@ export const App = () => {
           />
         </div>
 
-        <div className={appSt.row}>
-          <div>
-            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-              Возможная продажа не ранее
-            </Typography.Text>
-            <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              05.09.2024
-            </Typography.Text>
-          </div>
+        {data.hideSellDate ? null : (
+          <div className={appSt.row}>
+            <div>
+              <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+                Возможная продажа не ранее
+              </Typography.Text>
+              <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
+                05.09.2024
+              </Typography.Text>
+            </div>
 
-          <IconButton
-            view="primary"
-            size={32}
-            icon={<CDNIcon name="glyph_information-circle_m" color="#C1C1C3" />}
-            onClick={() =>
-              openModal({
-                title: 'Когда можно продать ЦФА',
-                subtitle: 'Дату, с которой можно перепродать ЦФА на вторичном рынке устанавливает эмитент',
-              })
-            }
-          />
-        </div>
+            <IconButton
+              view="primary"
+              size={32}
+              icon={<CDNIcon name="glyph_information-circle_m" color="#C1C1C3" />}
+              onClick={() =>
+                openModal({
+                  title: 'Когда можно продать ЦФА',
+                  subtitle: 'Дату, с которой можно перепродать ЦФА на вторичном рынке устанавливает эмитент',
+                })
+              }
+            />
+          </div>
+        )}
 
         <div className={appSt.row}>
           <div>
@@ -268,44 +270,20 @@ export const App = () => {
           Почему стоит купить
         </Typography.TitleResponsive>
 
-        <div className={appSt.rowImg}>
-          <img style={{ objectFit: 'contain' }} src={sun} width={48} height={48} />
+        {data.imgRows.map(imgRow => (
+          <div key={imgRow.title} className={appSt.rowImg}>
+            <img style={{ objectFit: 'contain' }} src={imgRow.img} width={48} height={48} />
 
-          <div>
-            <Typography.Text tag="p" view="primary-small" defaultMargins={false} color="secondary">
-              Комплексная диверсификация
-            </Typography.Text>
-            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
-              По застройщикам и ЖК региона
-            </Typography.Text>
+            <div>
+              <Typography.Text tag="p" view="primary-small" defaultMargins={false} color="secondary">
+                {imgRow.title}
+              </Typography.Text>
+              <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
+                {imgRow.subtitle}
+              </Typography.Text>
+            </div>
           </div>
-        </div>
-
-        <div className={appSt.rowImg}>
-          <img style={{ objectFit: 'contain' }} src={suns} width={48} height={48} />
-
-          <div>
-            <Typography.Text tag="p" view="primary-small" defaultMargins={false} color="secondary">
-              Ожидаемая доходность
-            </Typography.Text>
-            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
-              18% — 20% годовых
-            </Typography.Text>
-          </div>
-        </div>
-
-        <div className={appSt.rowImg}>
-          <img style={{ objectFit: 'contain' }} src={calendar} width={48} height={48} />
-
-          <div>
-            <Typography.Text tag="p" view="primary-small" defaultMargins={false} color="secondary">
-              Комфортный срок
-            </Typography.Text>
-            <Typography.Text tag="p" view="primary-medium" defaultMargins={false}>
-              Срок инвестиций — 3 года
-            </Typography.Text>
-          </div>
-        </div>
+        ))}
 
         <Typography.TitleResponsive style={{ marginTop: '1rem' }} tag="h2" view="medium" font="system" weight="medium">
           Дополнительно
@@ -317,7 +295,7 @@ export const App = () => {
               Эмитент
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              Альфа-Банк
+              {data.emitment}
             </Typography.Text>
           </div>
         </div>
@@ -328,13 +306,13 @@ export const App = () => {
               Юридический адрес эмитента
             </Typography.Text>
             <Typography.Text tag="p" view="primary-medium" weight="medium" defaultMargins={false}>
-              ул. Каланчевская, д.27, г. Москва, 107078
+              {data.address}
             </Typography.Text>
           </div>
         </div>
 
         <TooltipDesktop view="hint" open={!!copiedText} content="Скопировано" position="top" offset={[0, -10]}>
-          <div className={appSt.row} onClick={() => copy('https://alfabank.ru/')}>
+          <div className={appSt.row} onClick={() => copy(data.site)}>
             <div>
               <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
                 Cайт эмитента
@@ -346,7 +324,7 @@ export const App = () => {
                 defaultMargins={false}
                 style={{ textDecoration: 'underline' }}
               >
-                https://alfabank.ru/
+                {data.site}
               </Typography.Text>
             </div>
 
