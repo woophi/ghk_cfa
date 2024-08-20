@@ -362,10 +362,10 @@ export const App = () => {
             <div className={appSt.btnContainer}>
               <div>
                 <Typography.TitleResponsive font="system" tag="h2" view="xsmall" weight="bold">
-                  {cfaValue * 1000} ₽
+                  {cfaValue * data.cfaPriceNumber} ₽
                 </Typography.TitleResponsive>
                 <Typography.Text color="secondary-inverted" tag="p" view="primary-medium" defaultMargins={false}>
-                  Комиссия 0 ₽
+                  Комиссия {cfaValue ? ((cfaValue * data.cfaPriceNumber) / 100).toFixed(2) : 0} ₽
                 </Typography.Text>
               </div>
               <IconButton
