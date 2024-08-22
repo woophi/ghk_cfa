@@ -3,7 +3,14 @@ declare global {
     dataLayer: unknown[];
   }
 }
-export const sendDataToGA = async (item: string) => {
+
+type Paylaod = {
+  cfa_quantity: number;
+  cfa_sum: number;
+  cfa_commission: string | number;
+};
+
+export const sendDataToGA = async (payload: Paylaod) => {
   try {
     const now = new Date();
     const date = `${now.getFullYear()}-${
@@ -11,11 +18,11 @@ export const sendDataToGA = async (item: string) => {
     }-${now.getDate()} ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
     await fetch(
-      'https://script.google.com/macros/s/AKfycbxrAyYoX4OhNQkTHNY-58kSnJmJM4uaO6jmiycC1-8MEZBzTLl8OjZ6xv_cus8zItP8oA/exec',
+      'https://script.google.com/macros/s/AKfycbwaYuRusjAqUUXmTolinNRDspWVHIUax6ZTwJQZLhjJ4hEWkeMqgt0FiwRKtwFxDdmaqQ/exec',
       {
         redirect: 'follow',
         method: 'POST',
-        body: JSON.stringify({ date, button: item, variant: 'variant_1' }),
+        body: JSON.stringify({ date, variant: 'cfa', ...payload }),
         headers: {
           'Content-Type': 'text/plain;charset=utf-8',
         },

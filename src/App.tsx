@@ -12,6 +12,7 @@ import { LS, LSKeys } from './ls';
 import { appSt } from './style.css';
 import { ThxLayout } from './thx/ThxLayout';
 import { useCopyToClipboard } from './useCopyToClipBoard';
+import { sendDataToGA } from './utils/events';
 
 export const App = () => {
   const [cfaValue, setCFA] = useState(0);
@@ -31,14 +32,15 @@ export const App = () => {
       return;
     }
     setLoading(true);
-    // LS.setItem(LSKeys.ShowThx, true);
-    setLoading(false);
-    setThx(true);
-    // sendDataToGA(checkedBox).then(() => {
-    //   LS.setItem(LSKeys.ShowThx, true);
-    //   setLoading(false);
-    //   setThx(true);
-    // });
+    sendDataToGA({
+      cfa_commission: cfaValue ? ((cfaValue * data.cfaPriceNumber) / 100).toFixed(2) : 0,
+      cfa_quantity: cfaValue,
+      cfa_sum: cfaValue * data.cfaPriceNumber,
+    }).then(() => {
+      LS.setItem(LSKeys.ShowThx, true);
+      setLoading(false);
+      setThx(true);
+    });
   }, [cfaValue]);
 
   const hideNotification = useCallback(() => setIsVisible(false), []);
