@@ -130,7 +130,7 @@ export const App = () => {
                 {data.cfaPrice}
               </Typography.Text>
               <Typography.Text tag="p" view="primary-medium" color="secondary" defaultMargins={false}>
-                1 ЦФА = 0,01 м2
+                1 ЦФА = 0,1 м2
               </Typography.Text>
             </div>
           </div>

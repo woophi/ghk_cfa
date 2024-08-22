@@ -7,7 +7,13 @@ import { thxSt } from './style.css';
 import { useTimeout } from './useTimeout';
 
 export const ThxLayout = () => {
-  useTimeout(() => window.location.replace('alfabank://longread?endpoint=v1/adviser/longreads/15885'), 5000);
+  useTimeout(
+    () =>
+      window.location.replace(
+        'alfabank://webFeature?type=recommendation&url=https://dfa.alfabank.ru/retail-investor/webview/?channel=df1',
+      ),
+    5000,
+  );
   return (
     <>
       <div className={thxSt.container}>
@@ -21,7 +27,11 @@ export const ThxLayout = () => {
       </div>
       <Gap size={128} />
       <div className={appSt.bottomBtn}>
-        <ButtonMobile block view="primary" href="alfabank://longread?endpoint=v1/adviser/longreads/15885">
+        <ButtonMobile
+          block
+          view="primary"
+          href="alfabank://webFeature?type=recommendation&url=https://dfa.alfabank.ru/retail-investor/webview/?channel=df1"
+        >
           Буду ждать!
         </ButtonMobile>
       </div>
