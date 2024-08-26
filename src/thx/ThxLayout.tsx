@@ -4,16 +4,8 @@ import { Typography } from '@alfalab/core-components/typography';
 import aLogo from '../assets/a_logo.png';
 import { appSt } from '../style.css';
 import { thxSt } from './style.css';
-import { useTimeout } from './useTimeout';
 
 export const ThxLayout = () => {
-  useTimeout(
-    () =>
-      window.location.replace(
-        'alfabank://webFeature?type=recommendation&url=https://dfa.alfabank.ru/retail-investor/webview/?channel=df1',
-      ),
-    5000,
-  );
   return (
     <>
       <div className={thxSt.container}>
