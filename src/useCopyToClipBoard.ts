@@ -18,7 +18,7 @@ export const useCopyToClipboard = () => {
 
     // Try to save to clipboard then save it in the state if worked
     try {
-      await navigator.clipboard.writeText(text);
+      await new Promise<void>((res, rej) => setClipboard(text, res, rej));
       setCopiedText(text);
       return true;
     } catch (error) {
@@ -29,4 +29,37 @@ export const useCopyToClipboard = () => {
   };
 
   return { copy, copiedText, clearValue };
+};
+
+export const setClipboard = (text: string, resolve: () => void, reject: () => void) => {
+  const setClipboardOnOldBrowsers = (value: string, res: () => void, rej: () => void) => {
+    const tempInput = document.createElement('input');
+
+    tempInput.style.position = 'absolute';
+    tempInput.style.left = '-1000px';
+    tempInput.style.top = '1000px';
+    tempInput.value = value;
+    document.body.appendChild(tempInput);
+    tempInput.select();
+
+    if (document.execCommand('copy')) {
+      res();
+    } else {
+      rej();
+    }
+
+    document.body.removeChild(tempInput);
+  };
+
+  const { clipboard } = navigator;
+
+  try {
+    if (clipboard !== undefined) {
+      clipboard.writeText(text).then(resolve).catch(reject);
+    } else {
+      setClipboardOnOldBrowsers(text, resolve, reject);
+    }
+  } catch (e) {
+    reject();
+  }
 };
