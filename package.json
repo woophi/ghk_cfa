@@ -15,7 +15,8 @@
     "@vanilla-extract/recipes": "^0.5.3",
     "@vanilla-extract/vite-plugin": "^4.0.13",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "react-tooltip": "^5.28.0"
   },
   "devDependencies": {
     "@types/react": "^18.3.3",

@@ -3,9 +3,9 @@ import { CDNIcon } from '@alfalab/core-components/cdn-icon';
 import { IconButton } from '@alfalab/core-components/icon-button';
 import { Notification } from '@alfalab/core-components/notification';
 import { ProgressBar } from '@alfalab/core-components/progress-bar';
-import { TooltipDesktop } from '@alfalab/core-components/tooltip/desktop';
 import { Typography } from '@alfalab/core-components/typography';
 import { useCallback, useState } from 'react';
+import { Tooltip } from 'react-tooltip';
 import main from './assets/main.jpg';
 import { data } from './data';
 import { LS, LSKeys } from './ls';
@@ -313,26 +313,26 @@ export const App = () => {
           </div>
         </div>
 
-        <TooltipDesktop view="hint" open={!!copiedText} content="Скопировано" position="top" offset={[0, -10]}>
-          <div className={appSt.row} onClick={() => copy(data.site)}>
-            <div>
-              <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
-                Cайт эмитента
-              </Typography.Text>
-              <Typography.Text
-                tag="p"
-                view="primary-medium"
-                weight="medium"
-                defaultMargins={false}
-                style={{ textDecoration: 'underline' }}
-              >
-                {data.site}
-              </Typography.Text>
-            </div>
+        <Tooltip isOpen={!!copiedText} anchorSelect="#iads" content="Скопировано" place="top" />
 
-            <IconButton view="primary" size={32} icon={<CDNIcon name="glyph_copy-line_m" color="#C1C1C3" />} />
+        <div id="iads" className={appSt.row} onClick={() => copy(data.site)}>
+          <div>
+            <Typography.Text tag="p" view="primary-small" color="secondary" defaultMargins={false}>
+              Cайт эмитента
+            </Typography.Text>
+            <Typography.Text
+              tag="p"
+              view="primary-medium"
+              weight="medium"
+              defaultMargins={false}
+              style={{ textDecoration: 'underline' }}
+            >
+              {data.site}
+            </Typography.Text>
           </div>
-        </TooltipDesktop>
+
+          <IconButton view="primary" size={32} icon={<CDNIcon name="glyph_copy-line_m" color="#C1C1C3" />} />
+        </div>
 
         <div style={{ height: '160px' }} />
       </div>
