@@ -24,7 +24,7 @@ export const ThxLayout = () => {
         <ButtonMobile
           block
           view="primary"
-          href="alfabank://webFeature?type=recommendation&url=https://dfa.alfabank.ru/retail-investor/webview/?channel=df1"
+          href="alfabank://webFeature?type=recommendation&url=https%3A%2F%2Fdfa.alfabank.ru%2Fretail-investor%2Fwebview%2F%3Fchannel%3Ddf1"
         >
           Буду ждать!
         </ButtonMobile>
